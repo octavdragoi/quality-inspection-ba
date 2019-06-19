@@ -1,0 +1,653 @@
+{
+  "namespace": "quality",
+  "definitions": {
+    "DatabaseServices": {
+      "kind": "service",
+      "@source": "srv/cat-service.cds"
+    },
+    "DatabaseServices.Dates": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_DATES",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Dates"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "year": {
+          "@cds.persistence.name": "YEAR",
+          "type": "cds.Integer"
+        },
+        "month": {
+          "@cds.persistence.name": "MONTH",
+          "type": "cds.Integer"
+        },
+        "day": {
+          "@cds.persistence.name": "DAY",
+          "type": "cds.Integer"
+        },
+        "hour": {
+          "@cds.persistence.name": "HOUR",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "DatabaseServices.Defects": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_DEFECTS",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Defects"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "products_defect": {
+          "@cds.persistence.name": "PRODUCTS_DEFECT",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "DatabaseServices.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defect",
+                "defect"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "description": {
+          "@cds.persistence.name": "DESCRIPTION",
+          "type": "cds.String"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "DatabaseServices.Factories": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_FACTORIES",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Factories"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "location": {
+          "@cds.persistence.name": "LOCATION",
+          "type": "cds.String"
+        },
+        "products": {
+          "@cds.persistence.name": "PRODUCTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "DatabaseServices.Products",
+          "on": [
+            {
+              "ref": [
+                "products",
+                "factory"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      },
+      "$syntax": "projection"
+    },
+    "DatabaseServices.Images": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_IMAGES",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Images"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "DatabaseServices.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "url": {
+          "@cds.persistence.name": "URL",
+          "type": "cds.String"
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "DatabaseServices.Products": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_PRODUCTS",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "factory": {
+          "@cds.persistence.name": "FACTORY",
+          "type": "cds.Association",
+          "target": "DatabaseServices.Factories",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "factory_ID"
+            }
+          ]
+        },
+        "images": {
+          "@cds.persistence.name": "IMAGES",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "DatabaseServices.Images",
+          "on": [
+            {
+              "ref": [
+                "images",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "DatabaseServices.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defects",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "capture_date": {
+          "@cds.persistence.name": "CAPTURE_DATE",
+          "type": "cds.DateTime"
+        },
+        "factory_ID": {
+          "@cds.persistence.name": "FACTORY_ID",
+          "@odata.foreignKey4": "factory",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "DatabaseServices.Products_Defects": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "DATABASESERVICES_PRODUCTS_DEFECTS",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products_Defects"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "type": "cds.Association",
+          "target": "DatabaseServices.Defects",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "defect_ID"
+            }
+          ]
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "DatabaseServices.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "defect_ID": {
+          "@cds.persistence.name": "DEFECT_ID",
+          "@odata.foreignKey4": "defect",
+          "type": "cds.Integer"
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "quality.Dates": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_DATES",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "year": {
+          "@cds.persistence.name": "YEAR",
+          "type": "cds.Integer"
+        },
+        "month": {
+          "@cds.persistence.name": "MONTH",
+          "type": "cds.Integer"
+        },
+        "day": {
+          "@cds.persistence.name": "DAY",
+          "type": "cds.Integer"
+        },
+        "hour": {
+          "@cds.persistence.name": "HOUR",
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "quality.Defects": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_DEFECTS",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "products_defect": {
+          "@cds.persistence.name": "PRODUCTS_DEFECT",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "quality.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defect",
+                "defect"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "description": {
+          "@cds.persistence.name": "DESCRIPTION",
+          "type": "cds.String"
+        }
+      }
+    },
+    "quality.Factories": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_FACTORIES",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "location": {
+          "@cds.persistence.name": "LOCATION",
+          "type": "cds.String"
+        },
+        "products": {
+          "@cds.persistence.name": "PRODUCTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "quality.Products",
+          "on": [
+            {
+              "ref": [
+                "products",
+                "factory"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "quality.Images": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_IMAGES",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "quality.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "url": {
+          "@cds.persistence.name": "URL",
+          "type": "cds.String"
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "quality.Products": {
+      "kind": "entity",
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_PRODUCTS",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "factory": {
+          "@cds.persistence.name": "FACTORY",
+          "type": "cds.Association",
+          "target": "quality.Factories",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "factory_ID"
+            }
+          ]
+        },
+        "images": {
+          "@cds.persistence.name": "IMAGES",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "quality.Images",
+          "on": [
+            {
+              "ref": [
+                "images",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "quality.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defects",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "capture_date": {
+          "@cds.persistence.name": "CAPTURE_DATE",
+          "type": "cds.DateTime"
+        },
+        "factory_ID": {
+          "@cds.persistence.name": "FACTORY_ID",
+          "@odata.foreignKey4": "factory",
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "quality.Products_Defects": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_PRODUCTS_DEFECTS",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "type": "cds.Association",
+          "target": "quality.Defects",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "defect_ID"
+            }
+          ]
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "quality.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "defect_ID": {
+          "@cds.persistence.name": "DEFECT_ID",
+          "@odata.foreignKey4": "defect",
+          "type": "cds.Integer"
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        }
+      }
+    }
+  },
+  "version": {
+    "csn": "1.0"
+  },
+  "meta": {
+    "creator": "CDS Compiler v1.13.4"
+  },
+  "$version": "1.0",
+  "@sql_mapping": "plain"
+}

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+  <edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="DatabaseServices" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Dates" EntityType="DatabaseServices.Dates"/>
+        <EntitySet Name="Defects" EntityType="DatabaseServices.Defects"/>
+        <EntitySet Name="Factories" EntityType="DatabaseServices.Factories"/>
+        <EntitySet Name="Images" EntityType="DatabaseServices.Images"/>
+        <EntitySet Name="Products" EntityType="DatabaseServices.Products"/>
+        <EntitySet Name="Products_Defects" EntityType="DatabaseServices.Products_Defects"/>
+        <AssociationSet Name="Images_product" Association="DatabaseServices.Images_product">
+          <End Role="Images" EntitySet="Images"/>
+          <End Role="Products" EntitySet="Products"/>
+        </AssociationSet>
+        <AssociationSet Name="Products_factory" Association="DatabaseServices.Products_factory">
+          <End Role="Products" EntitySet="Products"/>
+          <End Role="Factories" EntitySet="Factories"/>
+        </AssociationSet>
+        <AssociationSet Name="Products_Defects_defect" Association="DatabaseServices.Products_Defects_defect">
+          <End Role="Products_Defects" EntitySet="Products_Defects"/>
+          <End Role="Defects" EntitySet="Defects"/>
+        </AssociationSet>
+        <AssociationSet Name="Products_Defects_product" Association="DatabaseServices.Products_Defects_product">
+          <End Role="Products_Defects" EntitySet="Products_Defects"/>
+          <End Role="Products" EntitySet="Products"/>
+        </AssociationSet>
+      </EntityContainer>
+      <EntityType Name="Dates">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="year" Type="Edm.Int32"/>
+        <Property Name="month" Type="Edm.Int32"/>
+        <Property Name="day" Type="Edm.Int32"/>
+        <Property Name="hour" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="Defects">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="products_defect" Relationship="DatabaseServices.Products_Defects_defect" FromRole="Defects" ToRole="Products_Defects"/>
+        <Property Name="description" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="Factories">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="location" Type="Edm.String"/>
+        <NavigationProperty Name="products" Relationship="DatabaseServices.Products_factory" FromRole="Factories" ToRole="Products"/>
+      </EntityType>
+      <EntityType Name="Images">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="product" Relationship="DatabaseServices.Images_product" FromRole="Images" ToRole="Products"/>
+        <Property Name="url" Type="Edm.String"/>
+        <Property Name="product_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="Products">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="factory" Relationship="DatabaseServices.Products_factory" FromRole="Products" ToRole="Factories"/>
+        <NavigationProperty Name="images" Relationship="DatabaseServices.Images_product" FromRole="Products" ToRole="Images"/>
+        <NavigationProperty Name="products_defects" Relationship="DatabaseServices.Products_Defects_product" FromRole="Products" ToRole="Products_Defects"/>
+        <Property Name="capture_date" Type="Edm.DateTimeOffset"/>
+        <Property Name="factory_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="Products_Defects">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="defect" Relationship="DatabaseServices.Products_Defects_defect" FromRole="Products_Defects" ToRole="Defects"/>
+        <NavigationProperty Name="product" Relationship="DatabaseServices.Products_Defects_product" FromRole="Products_Defects" ToRole="Products"/>
+        <Property Name="defect_ID" Type="Edm.Int32"/>
+        <Property Name="product_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <Association Name="Images_product">
+        <End Role="Images" Type="DatabaseServices.Images" Multiplicity="*"/>
+        <End Role="Products" Type="DatabaseServices.Products" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Products">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Images">
+            <PropertyRef Name="product_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Products_factory">
+        <End Role="Products" Type="DatabaseServices.Products" Multiplicity="*"/>
+        <End Role="Factories" Type="DatabaseServices.Factories" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Factories">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Products">
+            <PropertyRef Name="factory_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Products_Defects_defect">
+        <End Role="Products_Defects" Type="DatabaseServices.Products_Defects" Multiplicity="*"/>
+        <End Role="Defects" Type="DatabaseServices.Defects" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Defects">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Products_Defects">
+            <PropertyRef Name="defect_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Products_Defects_product">
+        <End Role="Products_Defects" Type="DatabaseServices.Products_Defects" Multiplicity="*"/>
+        <End Role="Products" Type="DatabaseServices.Products" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Products">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Products_Defects">
+            <PropertyRef Name="product_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Annotations Target="DatabaseServices.Dates" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
+      </Annotations>
+      <Annotations Target="DatabaseServices.Defects" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
+      </Annotations>
+      <Annotations Target="DatabaseServices.Factories" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
+      </Annotations>
+      <Annotations Target="DatabaseServices.Products" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
