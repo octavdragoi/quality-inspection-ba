@@ -119,15 +119,6 @@
           </Dependent>
         </ReferentialConstraint>
       </Association>
-      <Annotations Target="DatabaseServices.Defects" xmlns="http://docs.oasis-open.org/odata/ns/edm">
-        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
-      </Annotations>
-      <Annotations Target="DatabaseServices.Factories" xmlns="http://docs.oasis-open.org/odata/ns/edm">
-        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
-      </Annotations>
-      <Annotations Target="DatabaseServices.Products" xmlns="http://docs.oasis-open.org/odata/ns/edm">
-        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
-      </Annotations>
     </Schema>
   </edmx:DataServices>
 </edmx:Edmx>

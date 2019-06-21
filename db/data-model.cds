@@ -1,6 +1,5 @@
 namespace quality;
 
-@Analytics.dataCategory: #DIMENSION
 @Catalog.tableType: #COLUMN
 entity Factories {
   key ID : Integer;
@@ -15,7 +14,6 @@ entity Images {
   url: String;
 }
 
-@Analytics.dataCategory: #DIMENSION
 @Catalog.tableType: #COLUMN
 entity Defects {
   key ID : Integer;
@@ -23,7 +21,7 @@ entity Defects {
   description: String;
 }
 
-@Analytics.dataCategory: #DIMENSION
+
 @Catalog.tableType: #COLUMN
 entity Products {
   key ID : Integer;
@@ -40,7 +38,6 @@ entity Products_Defects {
   product : Association to Products;
 }
 
-@Analytics.dataCategory: #DIMENSION
 @Catalog.tableType: #COLUMN
 entity Dates {
   key ID : Integer;
@@ -50,4 +47,11 @@ entity Dates {
   hour : Integer;
 }
 
-
+view ItemsView as select from quality.Products
+{
+	key products_defects.ID as ItemID,
+	ID as productID,
+	images.url as imagePath,
+	products_defects.defect.description as defect,
+	capture_date as date
+};

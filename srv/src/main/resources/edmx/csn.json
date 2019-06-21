@@ -7,9 +7,6 @@
     },
     "DatabaseServices.Defects": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -61,9 +58,6 @@
     },
     "DatabaseServices.Factories": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -161,9 +155,6 @@
     },
     "DatabaseServices.Products": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -312,11 +303,81 @@
       },
       "$syntax": "projection"
     },
+    "ViewConsumerServices": {
+      "kind": "service",
+      "@source": "srv/cat-service.cds"
+    },
+    "ViewConsumerServices.ItemView": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_ITEMVIEW",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.ItemsView"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "ref": [
+                "ItemID"
+              ]
+            },
+            {
+              "ref": [
+                "productID"
+              ]
+            },
+            {
+              "ref": [
+                "imagePath"
+              ]
+            },
+            {
+              "ref": [
+                "defect"
+              ]
+            },
+            {
+              "ref": [
+                "date"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ItemID": {
+          "@cds.persistence.name": "ITEMID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "productID": {
+          "@cds.persistence.name": "PRODUCTID",
+          "type": "cds.Integer"
+        },
+        "imagePath": {
+          "@cds.persistence.name": "IMAGEPATH",
+          "type": "cds.String"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "type": "cds.String"
+        },
+        "date": {
+          "@cds.persistence.name": "DATE",
+          "type": "cds.DateTime"
+        }
+      },
+      "$syntax": "view"
+    },
     "quality.Dates": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -347,9 +408,6 @@
     },
     "quality.Defects": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -390,9 +448,6 @@
     },
     "quality.Factories": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
@@ -467,11 +522,85 @@
         }
       }
     },
+    "quality.ItemsView": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_ITEMSVIEW",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "ref": [
+                "products_defects",
+                "ID"
+              ],
+              "as": "ItemID"
+            },
+            {
+              "ref": [
+                "ID"
+              ],
+              "as": "productID"
+            },
+            {
+              "ref": [
+                "images",
+                "url"
+              ],
+              "as": "imagePath"
+            },
+            {
+              "ref": [
+                "products_defects",
+                "defect",
+                "description"
+              ],
+              "as": "defect"
+            },
+            {
+              "ref": [
+                "capture_date"
+              ],
+              "as": "date"
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ItemID": {
+          "@cds.persistence.name": "ITEMID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "productID": {
+          "@cds.persistence.name": "PRODUCTID",
+          "type": "cds.Integer"
+        },
+        "imagePath": {
+          "@cds.persistence.name": "IMAGEPATH",
+          "type": "cds.String"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "type": "cds.String"
+        },
+        "date": {
+          "@cds.persistence.name": "DATE",
+          "type": "cds.DateTime"
+        }
+      },
+      "$syntax": "view"
+    },
     "quality.Products": {
       "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
       "@Catalog.tableType": {
         "#": "COLUMN"
       },
