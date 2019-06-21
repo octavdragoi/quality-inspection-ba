@@ -16,6 +16,13 @@ service ViewConsumerServices{
 		productID,
 		imagePath,
 		defect,
-		date
-	}
+		date,
+		factory
+	};
+	
+	@readOnly view AggregatesView as select from quality.AggregatesView
+	{
+		key defect,factoryName,mHour:Integer,mDay:Integer,mMonth:Integer,mYear:Integer,
+		NumDefect:Integer
+	};
 }

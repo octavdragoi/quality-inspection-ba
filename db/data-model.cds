@@ -53,5 +53,17 @@ view ItemsView as select from quality.Products
 	ID as productID,
 	images.url as imagePath,
 	products_defects.defect.description as defect,
-	capture_date as date
+	capture_date as date,
+	factory.location as factory
 };
+
+view AggregatesView as select from quality.Products{
+	count(*) as NumDefect,
+	key products_defects.defect.description as defect,
+	key	factory.location as factoryName,
+	key	hour(capture_date) as mHour,
+	key	month(capture_date) as mMonth,
+	key	year(capture_date) as mYear,
+	key	dayofmonth(capture_date) as mDay
+} group by products_defects.defect.description, factory.location,
+hour(capture_date), month(capture_date), year(capture_date), dayofmonth(capture_date);

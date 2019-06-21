@@ -307,6 +307,108 @@
       "kind": "service",
       "@source": "srv/cat-service.cds"
     },
+    "ViewConsumerServices.AggregatesView": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_AGGREGATESVIEW",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.AggregatesView"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "ref": [
+                "defect"
+              ]
+            },
+            {
+              "ref": [
+                "factoryName"
+              ]
+            },
+            {
+              "ref": [
+                "mHour"
+              ],
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "ref": [
+                "mDay"
+              ],
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "ref": [
+                "mMonth"
+              ],
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "ref": [
+                "mYear"
+              ],
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "ref": [
+                "NumDefect"
+              ],
+              "cast": {
+                "type": "cds.Integer"
+              }
+            }
+          ]
+        }
+      },
+      "elements": {
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "key": true,
+          "type": "cds.String"
+        },
+        "factoryName": {
+          "@cds.persistence.name": "FACTORYNAME",
+          "type": "cds.String"
+        },
+        "mHour": {
+          "@cds.persistence.name": "MHOUR",
+          "type": "cds.Integer"
+        },
+        "mDay": {
+          "@cds.persistence.name": "MDAY",
+          "type": "cds.Integer"
+        },
+        "mMonth": {
+          "@cds.persistence.name": "MMONTH",
+          "type": "cds.Integer"
+        },
+        "mYear": {
+          "@cds.persistence.name": "MYEAR",
+          "type": "cds.Integer"
+        },
+        "NumDefect": {
+          "@cds.persistence.name": "NUMDEFECT",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "view"
+    },
     "ViewConsumerServices.ItemView": {
       "kind": "entity",
       "@Catalog.tableType": {
@@ -347,6 +449,11 @@
               "ref": [
                 "date"
               ]
+            },
+            {
+              "ref": [
+                "factory"
+              ]
             }
           ]
         }
@@ -372,6 +479,192 @@
         "date": {
           "@cds.persistence.name": "DATE",
           "type": "cds.DateTime"
+        },
+        "factory": {
+          "@cds.persistence.name": "FACTORY",
+          "type": "cds.String"
+        }
+      },
+      "$syntax": "view"
+    },
+    "quality.AggregatesView": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "QUALITY_AGGREGATESVIEW",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products"
+            ]
+          },
+          "columns": [
+            {
+              "func": "count",
+              "args": [
+                "*"
+              ],
+              "as": "NumDefect"
+            },
+            {
+              "key": true,
+              "ref": [
+                "products_defects",
+                "defect",
+                "description"
+              ],
+              "as": "defect"
+            },
+            {
+              "key": true,
+              "ref": [
+                "factory",
+                "location"
+              ],
+              "as": "factoryName"
+            },
+            {
+              "key": true,
+              "func": "hour",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "mHour"
+            },
+            {
+              "key": true,
+              "func": "month",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "mMonth"
+            },
+            {
+              "key": true,
+              "func": "year",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "mYear"
+            },
+            {
+              "key": true,
+              "func": "dayofmonth",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "mDay"
+            }
+          ],
+          "groupBy": [
+            {
+              "ref": [
+                "products_defects",
+                "defect",
+                "description"
+              ]
+            },
+            {
+              "ref": [
+                "factory",
+                "location"
+              ]
+            },
+            {
+              "func": "hour",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ]
+            },
+            {
+              "func": "month",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ]
+            },
+            {
+              "func": "year",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ]
+            },
+            {
+              "func": "dayofmonth",
+              "args": [
+                {
+                  "ref": [
+                    "capture_date"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "NumDefect": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "NUMDEFECT"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "key": true,
+          "type": "cds.String"
+        },
+        "factoryName": {
+          "@cds.persistence.name": "FACTORYNAME",
+          "key": true,
+          "type": "cds.String"
+        },
+        "mHour": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "MHOUR",
+          "key": true
+        },
+        "mMonth": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "MMONTH",
+          "key": true
+        },
+        "mYear": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "MYEAR",
+          "key": true
+        },
+        "mDay": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "MDAY",
+          "key": true
         }
       },
       "$syntax": "view"
@@ -570,6 +863,13 @@
                 "capture_date"
               ],
               "as": "date"
+            },
+            {
+              "ref": [
+                "factory",
+                "location"
+              ],
+              "as": "factory"
             }
           ]
         }
@@ -595,6 +895,10 @@
         "date": {
           "@cds.persistence.name": "DATE",
           "type": "cds.DateTime"
+        },
+        "factory": {
+          "@cds.persistence.name": "FACTORY",
+          "type": "cds.String"
         }
       },
       "$syntax": "view"
