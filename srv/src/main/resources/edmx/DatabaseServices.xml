@@ -3,7 +3,6 @@
   <edmx:DataServices m:DataServiceVersion="2.0">
     <Schema Namespace="DatabaseServices" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
       <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
-        <EntitySet Name="Dates" EntityType="DatabaseServices.Dates"/>
         <EntitySet Name="Defects" EntityType="DatabaseServices.Defects"/>
         <EntitySet Name="Factories" EntityType="DatabaseServices.Factories"/>
         <EntitySet Name="Images" EntityType="DatabaseServices.Images"/>
@@ -26,16 +25,6 @@
           <End Role="Products" EntitySet="Products"/>
         </AssociationSet>
       </EntityContainer>
-      <EntityType Name="Dates">
-        <Key>
-          <PropertyRef Name="ID"/>
-        </Key>
-        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-        <Property Name="year" Type="Edm.Int32"/>
-        <Property Name="month" Type="Edm.Int32"/>
-        <Property Name="day" Type="Edm.Int32"/>
-        <Property Name="hour" Type="Edm.Int32"/>
-      </EntityType>
       <EntityType Name="Defects">
         <Key>
           <PropertyRef Name="ID"/>
@@ -130,9 +119,6 @@
           </Dependent>
         </ReferentialConstraint>
       </Association>
-      <Annotations Target="DatabaseServices.Dates" xmlns="http://docs.oasis-open.org/odata/ns/edm">
-        <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
-      </Annotations>
       <Annotations Target="DatabaseServices.Defects" xmlns="http://docs.oasis-open.org/odata/ns/edm">
         <Annotation Term="Analytics.dataCategory" EnumMember="Analytics.dataCategoryType/DIMENSION"/>
       </Annotations>

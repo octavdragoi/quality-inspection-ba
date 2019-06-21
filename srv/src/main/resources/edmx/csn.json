@@ -5,49 +5,6 @@
       "kind": "service",
       "@source": "srv/cat-service.cds"
     },
-    "DatabaseServices.Dates": {
-      "kind": "entity",
-      "@Analytics.dataCategory": {
-        "#": "DIMENSION"
-      },
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "DATABASESERVICES_DATES",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Dates"
-            ]
-          }
-        }
-      },
-      "elements": {
-        "ID": {
-          "@cds.persistence.name": "ID",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "year": {
-          "@cds.persistence.name": "YEAR",
-          "type": "cds.Integer"
-        },
-        "month": {
-          "@cds.persistence.name": "MONTH",
-          "type": "cds.Integer"
-        },
-        "day": {
-          "@cds.persistence.name": "DAY",
-          "type": "cds.Integer"
-        },
-        "hour": {
-          "@cds.persistence.name": "HOUR",
-          "type": "cds.Integer"
-        }
-      },
-      "$syntax": "projection"
-    },
     "DatabaseServices.Defects": {
       "kind": "entity",
       "@Analytics.dataCategory": {
@@ -57,6 +14,7 @@
         "#": "COLUMN"
       },
       "@cds.persistence.name": "DATABASESERVICES_DEFECTS",
+      "@readOnly": true,
       "query": {
         "SELECT": {
           "from": {
@@ -110,6 +68,7 @@
         "#": "COLUMN"
       },
       "@cds.persistence.name": "DATABASESERVICES_FACTORIES",
+      "@readOOnly": true,
       "query": {
         "SELECT": {
           "from": {
