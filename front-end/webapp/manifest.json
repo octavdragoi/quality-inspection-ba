@@ -66,13 +66,13 @@
 				"type": "sap.ui.model.resource.ResourceModel",
 				"uri": "i18n/i18n.properties"
 			},
-			"i18n|sap.suite.ui.generic.template.ListReport|AggregatesView": {
+			"i18n|sap.suite.ui.generic.template.ListReport|ItemView": {
 				"type": "sap.ui.model.resource.ResourceModel",
-				"uri": "i18n/ListReport/AggregatesView/i18n.properties"
+				"uri": "i18n/ListReport/ItemView/i18n.properties"
 			},
-			"i18n|sap.suite.ui.generic.template.ObjectPage|AggregatesView": {
+			"i18n|sap.suite.ui.generic.template.ObjectPage|ItemView": {
 				"type": "sap.ui.model.resource.ResourceModel",
-				"uri": "i18n/ObjectPage/AggregatesView/i18n.properties"
+				"uri": "i18n/ObjectPage/ItemView/i18n.properties"
 			},
 			"": {
 				"dataSource": "mainService",
@@ -109,8 +109,8 @@
 			"objectPageHeaderType": "Dynamic"
 		},
 		"pages": {
-			"ListReport|AggregatesView": {
-				"entitySet": "AggregatesView",
+			"ListReport|ItemView": {
+				"entitySet": "ItemView",
 				"component": {
 					"name": "sap.suite.ui.generic.template.ListReport",
 					"list": true,
@@ -119,8 +119,8 @@
 					}
 				},
 				"pages": {
-					"ObjectPage|AggregatesView": {
-						"entitySet": "AggregatesView",
+					"ObjectPage|ItemView": {
+						"entitySet": "ItemView",
 						"component": {
 							"name": "sap.suite.ui.generic.template.ObjectPage"
 						}
