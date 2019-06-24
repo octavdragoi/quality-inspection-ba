@@ -1,0 +1,95 @@
+{
+	"format_version": 1,
+	"imports": [
+		{
+			"target_table": "QUALITY_FACTORIES",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Factories.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"LOCATION"
+				]
+			}
+		},
+		{
+			"target_table": "QUALITY_DEFECTS",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Defects.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"DESCRIPTION"
+				]
+			}
+		},
+		{
+			"target_table": "QUALITY_DATES",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Dates.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"YEAR",
+					"MONTH",
+					"DAY",
+					"HOUR"
+				]
+			}
+		},
+		{
+			"target_table": "QUALITY_PRODUCTS_DEFECTS",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Products_Defects.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"DEFECT_ID",
+					"PRODUCT_ID"
+				]
+			}
+		},
+		{
+			"target_table": "QUALITY_PRODUCTS",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Products.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"FACTORY_ID",
+					"CAPTURE_DATE"
+				]
+			}
+		},
+		{
+			"target_table": "QUALITY_IMAGES",
+			"source_data": {
+			"data_type": "CSV",
+				"file_name": "Images.csv",
+				"has_header": true
+			},
+			"import_settings": {
+			"import_columns": [
+					"ID",
+					"PRODUCT_ID",
+					"URL"
+				]
+			}
+		}
+	]
+}
