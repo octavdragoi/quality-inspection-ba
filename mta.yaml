@@ -1,5 +1,5 @@
 ID: Quality_inspection
-_schema-version: "2.1"
+_schema-version: '2.1'
 description: Quality Inspection Project TUM
 parameters:
   deploy_mode: html5-repo
@@ -13,11 +13,24 @@ modules:
       memory: 256M
     requires:
       - name: Quality_inspection_html5_repo_runtime
+      - name: srv_api
+        group: destinations
+        properties:
+          forwardAuthToken: true
+          name: srv_api
+          url: '~{url}'
+      - name: uaa_Quality_inspection
   - name: Quality_inspection_ui_deployer
     type: com.sap.html5.application-content
     path: Quality_inspection_ui_deployer
     requires:
       - name: Quality_inspection_html5_repo_host
+    build-parameters:
+      requires:
+        - name: front-end
+          artifacts:
+            - './*'
+          target-path: resources/front-end
   - name: Quality_inspection-db
     type: hdb
     path: db
@@ -34,12 +47,24 @@ modules:
     provides:
       - name: srv_api
         properties:
-          url: ${default-url}
+          url: '${default-url}'
     requires:
       - name: Quality_inspection-db-hdi-container
         properties:
-          JBP_CONFIG_RESOURCE_CONFIGURATION: '[tomcat/webapps/ROOT/META-INF/context.xml:
-            {"service_name_for_DefaultDB" : "~{hdi-container-name}"}]'
+          JBP_CONFIG_RESOURCE_CONFIGURATION: '[tomcat/webapps/ROOT/META-INF/context.xml: {"service_name_for_DefaultDB" : "~{hdi-container-name}"}]'
+  - name: front-end
+    type: html5
+    path: front-end
+    build-parameters:
+      builder: grunt
+    requires:
+      - name: srv_api
+        group: destinations
+        properties:
+          forwardAuthToken: true
+          strictSSL: false
+          name: srv_api
+          url: '~{url}'
 resources:
   - name: Quality_inspection_html5_repo_runtime
     parameters:
@@ -54,4 +79,10 @@ resources:
   - name: Quality_inspection-db-hdi-container
     type: com.sap.xs.hdi-container
     properties:
-      hdi-container-name: ${service-name}
+      hdi-container-name: '${service-name}'
+  - name: uaa_Quality_inspection
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+    type: org.cloudfoundry.managed-service
