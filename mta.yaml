@@ -27,10 +27,6 @@ modules:
       - name: Quality_inspection_html5_repo_host
     build-parameters:
       requires:
-        - name: front-end
-          artifacts:
-            - './*'
-          target-path: resources/front-end
         - name: UserInterface
           artifacts:
             - './*'
@@ -56,9 +52,9 @@ modules:
       - name: Quality_inspection-db-hdi-container
         properties:
           JBP_CONFIG_RESOURCE_CONFIGURATION: '[tomcat/webapps/ROOT/META-INF/context.xml: {"service_name_for_DefaultDB" : "~{hdi-container-name}"}]'
-  - name: front-end
+  - name: UserInterface
     type: html5
-    path: front-end
+    path: UserInterface
     build-parameters:
       builder: grunt
     requires:
@@ -69,11 +65,6 @@ modules:
           strictSSL: false
           name: srv_api
           url: '~{url}'
-  - name: UserInterface
-    type: html5
-    path: UserInterface
-    build-parameters:
-      builder: grunt
 resources:
   - name: Quality_inspection_html5_repo_runtime
     parameters:
