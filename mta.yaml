@@ -31,6 +31,10 @@ modules:
           artifacts:
             - './*'
           target-path: resources/front-end
+        - name: UserInterface
+          artifacts:
+            - './*'
+          target-path: resources/UserInterface
   - name: Quality_inspection-db
     type: hdb
     path: db
@@ -65,6 +69,11 @@ modules:
           strictSSL: false
           name: srv_api
           url: '~{url}'
+  - name: UserInterface
+    type: html5
+    path: UserInterface
+    build-parameters:
+      builder: grunt
 resources:
   - name: Quality_inspection_html5_repo_runtime
     parameters:
@@ -85,4 +94,9 @@ resources:
       path: ./xs-security.json
       service-plan: application
       service: xsuaa
+    type: org.cloudfoundry.managed-service
+  - name: dest_Quality_inspection
+    parameters:
+      service-plan: lite
+      service: destination
     type: org.cloudfoundry.managed-service
