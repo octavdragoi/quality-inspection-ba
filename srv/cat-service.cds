@@ -20,9 +20,28 @@ service ViewConsumerServices{
 		factory
 	};
 	
-	@readOnly view AggregatesView as select from quality.AggregatesView
+	@readOnly view countDefect as select from quality.countDefect
 	{
-		key defect,factoryName,mHour:Integer,mDay:Integer,mMonth:Integer,mYear:Integer,
+		key defect,
+		NumDefect:Integer
+	};
+	
+	@readOnly view countFactory as select from quality.countFactory
+	{
+		key factoryName,
+		NumDefect:Integer
+	};
+	
+	@readOnly view countYear as select from quality.countYear
+	{
+		key mYear:Integer,
+		NumDefect:Integer
+	};
+	
+	@readOnly view countMonth as select from quality.countMonth
+	{
+		key mYear:Integer,
+		key mMonth:Integer,
 		NumDefect:Integer
 	};
 }

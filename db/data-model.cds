@@ -67,3 +67,27 @@ view AggregatesView as select from quality.Products{
 	key	dayofmonth(capture_date) as mDay
 } group by products_defects.defect.description, factory.location,
 hour(capture_date), month(capture_date), year(capture_date), dayofmonth(capture_date);
+
+
+view countDefect as select from quality.Products_Defects{
+	count(product.ID) as NumDefect,
+	key defect.description as defect,
+} where not(defect.ID =6) group by defect.description;
+
+view countFactory as select from quality.Products_Defects {
+	count(product.ID) as NumDefect,
+	key	product.factory.location as factoryName,
+}where not(defect.ID =6) group by product.factory.location;
+
+view countYear as select from quality.Products_Defects{
+	count(product.ID) as NumDefect,
+	key	year(product.capture_date) as mYear,
+}  where not(defect.ID =6)
+group by year(product.capture_date);
+
+view countMonth as select from quality.Products_Defects{
+	count(product.ID) as NumDefect,
+	key	month(product.capture_date) as mMonth,
+	key	year(product.capture_date) as mYear,
+}  where not(defect.ID =6)
+group by month(product.capture_date), year(product.capture_date);
