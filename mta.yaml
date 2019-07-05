@@ -5,32 +5,6 @@ parameters:
   deploy_mode: html5-repo
 version: 0.0.1
 modules:
-  - name: Quality_inspection_appRouter
-    type: approuter.nodejs
-    path: Quality_inspection_appRouter
-    parameters:
-      disk-quota: 256M
-      memory: 256M
-    requires:
-      - name: Quality_inspection_html5_repo_runtime
-      - name: srv_api
-        group: destinations
-        properties:
-          forwardAuthToken: true
-          name: srv_api
-          url: '~{url}'
-      - name: uaa_Quality_inspection
-  - name: Quality_inspection_ui_deployer
-    type: com.sap.html5.application-content
-    path: Quality_inspection_ui_deployer
-    requires:
-      - name: Quality_inspection_html5_repo_host
-    build-parameters:
-      requires:
-        - name: UserInterface
-          artifacts:
-            - './*'
-          target-path: resources/UserInterface
   - name: Quality_inspection-db
     type: hdb
     path: db
@@ -52,42 +26,8 @@ modules:
       - name: Quality_inspection-db-hdi-container
         properties:
           JBP_CONFIG_RESOURCE_CONFIGURATION: '[tomcat/webapps/ROOT/META-INF/context.xml: {"service_name_for_DefaultDB" : "~{hdi-container-name}"}]'
-  - name: UserInterface
-    type: html5
-    path: UserInterface
-    build-parameters:
-      builder: grunt
-    requires:
-      - name: srv_api
-        group: destinations
-        properties:
-          forwardAuthToken: true
-          strictSSL: false
-          name: srv_api
-          url: '~{url}'
 resources:
-  - name: Quality_inspection_html5_repo_runtime
-    parameters:
-      service-plan: app-runtime
-      service: html5-apps-repo
-    type: org.cloudfoundry.managed-service
-  - name: Quality_inspection_html5_repo_host
-    parameters:
-      service-plan: app-host
-      service: html5-apps-repo
-    type: org.cloudfoundry.managed-service
   - name: Quality_inspection-db-hdi-container
     type: com.sap.xs.hdi-container
     properties:
       hdi-container-name: '${service-name}'
-  - name: uaa_Quality_inspection
-    parameters:
-      path: ./xs-security.json
-      service-plan: application
-      service: xsuaa
-    type: org.cloudfoundry.managed-service
-  - name: dest_Quality_inspection
-    parameters:
-      service-plan: lite
-      service: destination
-    type: org.cloudfoundry.managed-service
