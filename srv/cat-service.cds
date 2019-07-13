@@ -10,38 +10,66 @@ service DatabaseServices {
 }
 
 service ViewConsumerServices{
-	@readOnly view ItemView as select from quality.ItemsView
+
+  
+   @readOnly entity Defects as projection on quality.Defects
+   {
+	ID,
+	description,
+	products_defects:redirected to Products_Defects
+   };
+   
+   @readOnly entity Products_Defects as projection on quality.Products_Defects
+   {
+	ID,
+	product:redirected to Products,
+	defect:redirected to Defects
+   };
+   
+   @readOnly entity Images as projection on quality.Images{
+   	ID,
+   	url,
+   	product: redirected to Products
+   };
+   
+   @readOnly entity Products as projection on quality.Products
+   {
+	  ID,
+	  factory.location,
+	  images: redirected to Images,
+	  products_defects: redirected to Products_Defects,
+	  capture_date
+   };
+   
+	@readOnly entity ItemView as select from quality.Products
 	{
-		key ItemID,
-		productID,
-		imagePath,
-		defect,
-		date,
-		factory
+	   key ID as productID,
+		capture_date as date,
+		factory.location as factory
 	};
 	
-	@readOnly view countDefect as select from quality.countDefect
-	{
-		key defect,
-		NumDefect:Integer
-	};
+  @readOnly entity countFactory as select from quality.Products_Defects {
+	count(product.ID) as NumDefect:Integer,
+	key	product.factory.location as factoryName,
+	}where not(defect.ID =6) group by product.factory.location;
 	
-	@readOnly view countFactory as select from quality.countFactory
-	{
-		key factoryName,
-		NumDefect:Integer
-	};
+ @readOnly entity countDefect as select from quality.Products_Defects{
+	count(product.ID) as NumDefect:Integer,
+	key defect.description as defect,
+} where not(defect.ID =6) group by defect.description;
 	
-	@readOnly view countYear as select from quality.countYear
-	{
-		key mYear:Integer,
-		NumDefect:Integer
-	};
-	
-	@readOnly view countMonth as select from quality.countMonth
-	{
-		key mYear:Integer,
-		key mMonth:Integer,
-		NumDefect:Integer
-	};
+/*
+@readOnly entity countYear as select from quality.Products_Defects{
+	count(product.ID) as NumDefect:Integer,
+	key	year(product.capture_date) as mYear:Integer,
+}  where not(defect.ID =6)
+group by year(product.capture_date);
+
+@readOnly entity countMonth as select from quality.Products_Defects{
+	count(product.ID) as NumDefect:Integer,
+	key	month(product.capture_date) as mMonth:Integer,
+	key	year(product.capture_date) as mYear:Integer,
+}  where not(defect.ID =6)
+group by month(product.capture_date), year(product.capture_date);
+*/
 }

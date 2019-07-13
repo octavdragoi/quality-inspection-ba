@@ -30,7 +30,7 @@
           <PropertyRef Name="ID"/>
         </Key>
         <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
-        <NavigationProperty Name="products_defect" Relationship="DatabaseServices.Products_Defects_defect" FromRole="Defects" ToRole="Products_Defects"/>
+        <NavigationProperty Name="products_defects" Relationship="DatabaseServices.Products_Defects_defect" FromRole="Defects" ToRole="Products_Defects"/>
         <Property Name="description" Type="Edm.String"/>
       </EntityType>
       <EntityType Name="Factories">

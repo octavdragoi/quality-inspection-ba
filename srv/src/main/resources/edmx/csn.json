@@ -26,8 +26,8 @@
           "key": true,
           "type": "cds.Integer"
         },
-        "products_defect": {
-          "@cds.persistence.name": "PRODUCTS_DEFECT",
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
           "type": "cds.Association",
           "cardinality": {
             "max": "*"
@@ -36,7 +36,7 @@
           "on": [
             {
               "ref": [
-                "products_defect",
+                "products_defects",
                 "defect"
               ]
             },
@@ -305,6 +305,144 @@
     "ViewConsumerServices": {
       "kind": "service"
     },
+    "ViewConsumerServices.Defects": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_DEFECTS",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Defects"
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "description"
+              ]
+            },
+            {
+              "ref": [
+                "products_defects"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Products_Defects"
+              }
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "description": {
+          "@cds.persistence.name": "DESCRIPTION",
+          "type": "cds.String"
+        },
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "ViewConsumerServices.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defects",
+                "defect"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      },
+      "$syntax": "projection"
+    },
+    "ViewConsumerServices.Images": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_IMAGES",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Images"
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "url"
+              ]
+            },
+            {
+              "ref": [
+                "product"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Products"
+              }
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "url": {
+          "@cds.persistence.name": "URL",
+          "type": "cds.String"
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "ViewConsumerServices.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
     "ViewConsumerServices.ItemView": {
       "kind": "entity",
       "@Catalog.tableType": {
@@ -316,61 +454,38 @@
         "SELECT": {
           "from": {
             "ref": [
-              "quality.ItemsView"
+              "quality.Products"
             ]
           },
           "columns": [
             {
               "key": true,
               "ref": [
-                "ItemID"
-              ]
+                "ID"
+              ],
+              "as": "productID"
             },
             {
               "ref": [
-                "productID"
-              ]
+                "capture_date"
+              ],
+              "as": "date"
             },
             {
               "ref": [
-                "imagePath"
-              ]
-            },
-            {
-              "ref": [
-                "defect"
-              ]
-            },
-            {
-              "ref": [
-                "date"
-              ]
-            },
-            {
-              "ref": [
-                "factory"
-              ]
+                "factory",
+                "location"
+              ],
+              "as": "factory"
             }
           ]
         }
       },
       "elements": {
-        "ItemID": {
-          "@cds.persistence.name": "ITEMID",
-          "key": true,
-          "type": "cds.Integer"
-        },
         "productID": {
           "@cds.persistence.name": "PRODUCTID",
+          "key": true,
           "type": "cds.Integer"
-        },
-        "imagePath": {
-          "@cds.persistence.name": "IMAGEPATH",
-          "type": "cds.String"
-        },
-        "defect": {
-          "@cds.persistence.name": "DEFECT",
-          "type": "cds.String"
         },
         "date": {
           "@cds.persistence.name": "DATE",
@@ -381,7 +496,202 @@
           "type": "cds.String"
         }
       },
-      "$syntax": "view"
+      "$syntax": "entity"
+    },
+    "ViewConsumerServices.Products": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_PRODUCTS",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products"
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "factory",
+                "location"
+              ]
+            },
+            {
+              "ref": [
+                "images"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Images"
+              }
+            },
+            {
+              "ref": [
+                "products_defects"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Products_Defects"
+              }
+            },
+            {
+              "ref": [
+                "capture_date"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "location": {
+          "@cds.persistence.name": "LOCATION",
+          "type": "cds.String"
+        },
+        "images": {
+          "@cds.persistence.name": "IMAGES",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "ViewConsumerServices.Images",
+          "on": [
+            {
+              "ref": [
+                "images",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "ViewConsumerServices.Products_Defects",
+          "on": [
+            {
+              "ref": [
+                "products_defects",
+                "product"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        },
+        "capture_date": {
+          "@cds.persistence.name": "CAPTURE_DATE",
+          "type": "cds.DateTime"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "ViewConsumerServices.Products_Defects": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_PRODUCTS_DEFECTS",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products_Defects"
+            ]
+          },
+          "columns": [
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            {
+              "ref": [
+                "product"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Products"
+              }
+            },
+            {
+              "ref": [
+                "defect"
+              ],
+              "cast": {
+                "target": "ViewConsumerServices.Defects"
+              }
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "product": {
+          "@cds.persistence.name": "PRODUCT",
+          "type": "cds.Association",
+          "target": "ViewConsumerServices.Products",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "product_ID"
+            }
+          ]
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "type": "cds.Association",
+          "target": "ViewConsumerServices.Defects",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "defect_ID"
+            }
+          ]
+        },
+        "product_ID": {
+          "@cds.persistence.name": "PRODUCT_ID",
+          "@odata.foreignKey4": "product",
+          "type": "cds.Integer"
+        },
+        "defect_ID": {
+          "@cds.persistence.name": "DEFECT_ID",
+          "@odata.foreignKey4": "defect",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
     },
     "ViewConsumerServices.countDefect": {
       "kind": "entity",
@@ -394,39 +704,72 @@
         "SELECT": {
           "from": {
             "ref": [
-              "quality.countDefect"
+              "quality.Products_Defects"
             ]
           },
           "columns": [
             {
-              "key": true,
-              "ref": [
-                "defect"
-              ]
-            },
-            {
-              "ref": [
-                "NumDefect"
+              "func": "count",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "ID"
+                  ]
+                }
               ],
+              "as": "NumDefect",
               "cast": {
                 "type": "cds.Integer"
               }
+            },
+            {
+              "key": true,
+              "ref": [
+                "defect",
+                "description"
+              ],
+              "as": "defect"
             }
+          ],
+          "groupBy": [
+            {
+              "ref": [
+                "defect",
+                "description"
+              ]
+            }
+          ],
+          "where": [
+            "not",
+            "(",
+            {
+              "ref": [
+                "defect",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "val": 6
+            },
+            ")"
           ]
         }
       },
       "elements": {
+        "NumDefect": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "NUMDEFECT",
+          "type": "cds.Integer"
+        },
         "defect": {
           "@cds.persistence.name": "DEFECT",
           "key": true,
           "type": "cds.String"
-        },
-        "NumDefect": {
-          "@cds.persistence.name": "NUMDEFECT",
-          "type": "cds.Integer"
         }
       },
-      "$syntax": "view"
+      "$syntax": "entity"
     },
     "ViewConsumerServices.countFactory": {
       "kind": "entity",
@@ -439,331 +782,74 @@
         "SELECT": {
           "from": {
             "ref": [
-              "quality.countFactory"
-            ]
-          },
-          "columns": [
-            {
-              "key": true,
-              "ref": [
-                "factoryName"
-              ]
-            },
-            {
-              "ref": [
-                "NumDefect"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            }
-          ]
-        }
-      },
-      "elements": {
-        "factoryName": {
-          "@cds.persistence.name": "FACTORYNAME",
-          "key": true,
-          "type": "cds.String"
-        },
-        "NumDefect": {
-          "@cds.persistence.name": "NUMDEFECT",
-          "type": "cds.Integer"
-        }
-      },
-      "$syntax": "view"
-    },
-    "ViewConsumerServices.countMonth": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "VIEWCONSUMERSERVICES_COUNTMONTH",
-      "@readOnly": true,
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.countMonth"
-            ]
-          },
-          "columns": [
-            {
-              "key": true,
-              "ref": [
-                "mYear"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            },
-            {
-              "key": true,
-              "ref": [
-                "mMonth"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            },
-            {
-              "ref": [
-                "NumDefect"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            }
-          ]
-        }
-      },
-      "elements": {
-        "mYear": {
-          "@cds.persistence.name": "MYEAR",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "mMonth": {
-          "@cds.persistence.name": "MMONTH",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "NumDefect": {
-          "@cds.persistence.name": "NUMDEFECT",
-          "type": "cds.Integer"
-        }
-      },
-      "$syntax": "view"
-    },
-    "ViewConsumerServices.countYear": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "VIEWCONSUMERSERVICES_COUNTYEAR",
-      "@readOnly": true,
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.countYear"
-            ]
-          },
-          "columns": [
-            {
-              "key": true,
-              "ref": [
-                "mYear"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            },
-            {
-              "ref": [
-                "NumDefect"
-              ],
-              "cast": {
-                "type": "cds.Integer"
-              }
-            }
-          ]
-        }
-      },
-      "elements": {
-        "mYear": {
-          "@cds.persistence.name": "MYEAR",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "NumDefect": {
-          "@cds.persistence.name": "NUMDEFECT",
-          "type": "cds.Integer"
-        }
-      },
-      "$syntax": "view"
-    },
-    "quality.AggregatesView": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_AGGREGATESVIEW",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products"
+              "quality.Products_Defects"
             ]
           },
           "columns": [
             {
               "func": "count",
               "args": [
-                "*"
+                {
+                  "ref": [
+                    "product",
+                    "ID"
+                  ]
+                }
               ],
-              "as": "NumDefect"
+              "as": "NumDefect",
+              "cast": {
+                "type": "cds.Integer"
+              }
             },
             {
               "key": true,
               "ref": [
-                "products_defects",
-                "defect",
-                "description"
-              ],
-              "as": "defect"
-            },
-            {
-              "key": true,
-              "ref": [
+                "product",
                 "factory",
                 "location"
               ],
               "as": "factoryName"
-            },
-            {
-              "key": true,
-              "func": "hour",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mHour"
-            },
-            {
-              "key": true,
-              "func": "month",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mMonth"
-            },
-            {
-              "key": true,
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mYear"
-            },
-            {
-              "key": true,
-              "func": "dayofmonth",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mDay"
             }
           ],
           "groupBy": [
             {
               "ref": [
-                "products_defects",
-                "defect",
-                "description"
-              ]
-            },
-            {
-              "ref": [
+                "product",
                 "factory",
                 "location"
               ]
-            },
-            {
-              "func": "hour",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ]
-            },
-            {
-              "func": "month",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ]
-            },
-            {
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ]
-            },
-            {
-              "func": "dayofmonth",
-              "args": [
-                {
-                  "ref": [
-                    "capture_date"
-                  ]
-                }
-              ]
             }
+          ],
+          "where": [
+            "not",
+            "(",
+            {
+              "ref": [
+                "defect",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "val": 6
+            },
+            ")"
           ]
         }
       },
       "elements": {
         "NumDefect": {
           "@Core.Computed": true,
-          "@cds.persistence.name": "NUMDEFECT"
-        },
-        "defect": {
-          "@cds.persistence.name": "DEFECT",
-          "key": true,
-          "type": "cds.String"
+          "@cds.persistence.name": "NUMDEFECT",
+          "type": "cds.Integer"
         },
         "factoryName": {
           "@cds.persistence.name": "FACTORYNAME",
           "key": true,
           "type": "cds.String"
-        },
-        "mHour": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MHOUR",
-          "key": true
-        },
-        "mMonth": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MMONTH",
-          "key": true
-        },
-        "mYear": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MYEAR",
-          "key": true
-        },
-        "mDay": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MDAY",
-          "key": true
         }
       },
-      "$syntax": "view"
+      "$syntax": "entity"
     },
     "quality.Dates": {
       "kind": "entity",
@@ -807,8 +893,8 @@
           "key": true,
           "type": "cds.Integer"
         },
-        "products_defect": {
-          "@cds.persistence.name": "PRODUCTS_DEFECT",
+        "products_defects": {
+          "@cds.persistence.name": "PRODUCTS_DEFECTS",
           "type": "cds.Association",
           "cardinality": {
             "max": "*"
@@ -817,7 +903,7 @@
           "on": [
             {
               "ref": [
-                "products_defect",
+                "products_defects",
                 "defect"
               ]
             },
@@ -910,94 +996,6 @@
           "type": "cds.Integer"
         }
       }
-    },
-    "quality.ItemsView": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_ITEMSVIEW",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products"
-            ]
-          },
-          "columns": [
-            {
-              "key": true,
-              "ref": [
-                "products_defects",
-                "ID"
-              ],
-              "as": "ItemID"
-            },
-            {
-              "ref": [
-                "ID"
-              ],
-              "as": "productID"
-            },
-            {
-              "ref": [
-                "images",
-                "url"
-              ],
-              "as": "imagePath"
-            },
-            {
-              "ref": [
-                "products_defects",
-                "defect",
-                "description"
-              ],
-              "as": "defect"
-            },
-            {
-              "ref": [
-                "capture_date"
-              ],
-              "as": "date"
-            },
-            {
-              "ref": [
-                "factory",
-                "location"
-              ],
-              "as": "factory"
-            }
-          ]
-        }
-      },
-      "elements": {
-        "ItemID": {
-          "@cds.persistence.name": "ITEMID",
-          "key": true,
-          "type": "cds.Integer"
-        },
-        "productID": {
-          "@cds.persistence.name": "PRODUCTID",
-          "type": "cds.Integer"
-        },
-        "imagePath": {
-          "@cds.persistence.name": "IMAGEPATH",
-          "type": "cds.String"
-        },
-        "defect": {
-          "@cds.persistence.name": "DEFECT",
-          "type": "cds.String"
-        },
-        "date": {
-          "@cds.persistence.name": "DATE",
-          "type": "cds.DateTime"
-        },
-        "factory": {
-          "@cds.persistence.name": "FACTORY",
-          "type": "cds.String"
-        }
-      },
-      "$syntax": "view"
     },
     "quality.Products": {
       "kind": "entity",
@@ -1128,349 +1126,6 @@
           "type": "cds.Integer"
         }
       }
-    },
-    "quality.countDefect": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_COUNTDEFECT",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products_Defects"
-            ]
-          },
-          "columns": [
-            {
-              "func": "count",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "ID"
-                  ]
-                }
-              ],
-              "as": "NumDefect"
-            },
-            {
-              "key": true,
-              "ref": [
-                "defect",
-                "description"
-              ],
-              "as": "defect"
-            }
-          ],
-          "groupBy": [
-            {
-              "ref": [
-                "defect",
-                "description"
-              ]
-            }
-          ],
-          "where": [
-            "not",
-            "(",
-            {
-              "ref": [
-                "defect",
-                "ID"
-              ]
-            },
-            "=",
-            {
-              "val": 6
-            },
-            ")"
-          ]
-        }
-      },
-      "elements": {
-        "NumDefect": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "NUMDEFECT"
-        },
-        "defect": {
-          "@cds.persistence.name": "DEFECT",
-          "key": true,
-          "type": "cds.String"
-        }
-      },
-      "$syntax": "view"
-    },
-    "quality.countFactory": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_COUNTFACTORY",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products_Defects"
-            ]
-          },
-          "columns": [
-            {
-              "func": "count",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "ID"
-                  ]
-                }
-              ],
-              "as": "NumDefect"
-            },
-            {
-              "key": true,
-              "ref": [
-                "product",
-                "factory",
-                "location"
-              ],
-              "as": "factoryName"
-            }
-          ],
-          "groupBy": [
-            {
-              "ref": [
-                "product",
-                "factory",
-                "location"
-              ]
-            }
-          ],
-          "where": [
-            "not",
-            "(",
-            {
-              "ref": [
-                "defect",
-                "ID"
-              ]
-            },
-            "=",
-            {
-              "val": 6
-            },
-            ")"
-          ]
-        }
-      },
-      "elements": {
-        "NumDefect": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "NUMDEFECT"
-        },
-        "factoryName": {
-          "@cds.persistence.name": "FACTORYNAME",
-          "key": true,
-          "type": "cds.String"
-        }
-      },
-      "$syntax": "view"
-    },
-    "quality.countMonth": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_COUNTMONTH",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products_Defects"
-            ]
-          },
-          "columns": [
-            {
-              "func": "count",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "ID"
-                  ]
-                }
-              ],
-              "as": "NumDefect"
-            },
-            {
-              "key": true,
-              "func": "month",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mMonth"
-            },
-            {
-              "key": true,
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mYear"
-            }
-          ],
-          "groupBy": [
-            {
-              "func": "month",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ]
-            },
-            {
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ]
-            }
-          ],
-          "where": [
-            "not",
-            "(",
-            {
-              "ref": [
-                "defect",
-                "ID"
-              ]
-            },
-            "=",
-            {
-              "val": 6
-            },
-            ")"
-          ]
-        }
-      },
-      "elements": {
-        "NumDefect": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "NUMDEFECT"
-        },
-        "mMonth": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MMONTH",
-          "key": true
-        },
-        "mYear": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MYEAR",
-          "key": true
-        }
-      },
-      "$syntax": "view"
-    },
-    "quality.countYear": {
-      "kind": "entity",
-      "@Catalog.tableType": {
-        "#": "COLUMN"
-      },
-      "@cds.persistence.name": "QUALITY_COUNTYEAR",
-      "query": {
-        "SELECT": {
-          "from": {
-            "ref": [
-              "quality.Products_Defects"
-            ]
-          },
-          "columns": [
-            {
-              "func": "count",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "ID"
-                  ]
-                }
-              ],
-              "as": "NumDefect"
-            },
-            {
-              "key": true,
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ],
-              "as": "mYear"
-            }
-          ],
-          "groupBy": [
-            {
-              "func": "year",
-              "args": [
-                {
-                  "ref": [
-                    "product",
-                    "capture_date"
-                  ]
-                }
-              ]
-            }
-          ],
-          "where": [
-            "not",
-            "(",
-            {
-              "ref": [
-                "defect",
-                "ID"
-              ]
-            },
-            "=",
-            {
-              "val": 6
-            },
-            ")"
-          ]
-        }
-      },
-      "elements": {
-        "NumDefect": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "NUMDEFECT"
-        },
-        "mYear": {
-          "@Core.Computed": true,
-          "@cds.persistence.name": "MYEAR",
-          "key": true
-        }
-      },
-      "$syntax": "view"
     }
   },
   "version": {
