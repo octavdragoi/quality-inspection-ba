@@ -46,7 +46,7 @@ service ViewConsumerServices{
 	   key ID as productID,
 		capture_date as date,
 		factory.location as factory
-	};
+	} order by ID desc;
 	
   @readOnly entity countFactory as select from quality.Products_Defects {
 	count(product.ID) as NumDefect:Integer,
@@ -64,12 +64,12 @@ service ViewConsumerServices{
 	key	year(product.capture_date) as mYear:Integer,
 }  where not(defect.ID =6)
 group by year(product.capture_date);
-
-@readOnly entity countMonth as select from quality.Products_Defects{
-	count(product.ID) as NumDefect:Integer,
-	key	month(product.capture_date) as mMonth:Integer,
-	key	year(product.capture_date) as mYear:Integer,
-}  where not(defect.ID =6)
-group by month(product.capture_date), year(product.capture_date);
 */
+@readOnly entity countDay as select from quality.Products_Defects{
+	key dayofweek(product.capture_date) as NDay:Integer,
+	count(product.ID) as NumDefect:Integer,
+	dayname(product.capture_date) as mDay:String
+}  where not(defect.ID = 6)
+group by dayofweek(product.capture_date), dayname(product.capture_date);
+
 }

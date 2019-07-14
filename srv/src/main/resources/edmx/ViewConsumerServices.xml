@@ -11,6 +11,7 @@
         <EntitySet Name="ItemView" EntityType="ViewConsumerServices.ItemView"/>
         <EntitySet Name="Products" EntityType="ViewConsumerServices.Products"/>
         <EntitySet Name="Products_Defects" EntityType="ViewConsumerServices.Products_Defects"/>
+        <EntitySet Name="countDay" EntityType="ViewConsumerServices.countDay"/>
         <EntitySet Name="countDefect" EntityType="ViewConsumerServices.countDefect"/>
         <EntitySet Name="countFactory" EntityType="ViewConsumerServices.countFactory"/>
         <AssociationSet Name="Images_product" Association="ViewConsumerServices.Images_product">
@@ -71,6 +72,14 @@
         <Property Name="product_ID" Type="Edm.Int32"/>
         <Property Name="defect_ID" Type="Edm.Int32"/>
       </EntityType>
+      <EntityType Name="countDay">
+        <Key>
+          <PropertyRef Name="NDay"/>
+        </Key>
+        <Property Name="NDay" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="mDay" Type="Edm.String"/>
+      </EntityType>
       <EntityType Name="countDefect">
         <Key>
           <PropertyRef Name="defect"/>
@@ -121,6 +130,15 @@
           </Dependent>
         </ReferentialConstraint>
       </Association>
+      <Annotations Target="ViewConsumerServices.countDay/NDay" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDay/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDay/mDay" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
       <Annotations Target="ViewConsumerServices.countDefect/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>

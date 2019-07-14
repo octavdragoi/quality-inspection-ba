@@ -478,6 +478,14 @@
               ],
               "as": "factory"
             }
+          ],
+          "orderBy": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "sort": "desc"
+            }
           ]
         }
       },
@@ -692,6 +700,129 @@
         }
       },
       "$syntax": "projection"
+    },
+    "ViewConsumerServices.countDay": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_COUNTDAY",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products_Defects"
+            ]
+          },
+          "columns": [
+            {
+              "key": true,
+              "func": "dayofweek",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "NDay",
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "func": "count",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "ID"
+                  ]
+                }
+              ],
+              "as": "NumDefect",
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "func": "dayname",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "capture_date"
+                  ]
+                }
+              ],
+              "as": "mDay",
+              "cast": {
+                "type": "cds.String"
+              }
+            }
+          ],
+          "groupBy": [
+            {
+              "func": "dayofweek",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "capture_date"
+                  ]
+                }
+              ]
+            },
+            {
+              "func": "dayname",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "capture_date"
+                  ]
+                }
+              ]
+            }
+          ],
+          "where": [
+            "not",
+            "(",
+            {
+              "ref": [
+                "defect",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "val": 6
+            },
+            ")"
+          ]
+        }
+      },
+      "elements": {
+        "NDay": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "NDAY",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "NumDefect": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "NUMDEFECT",
+          "type": "cds.Integer"
+        },
+        "mDay": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "MDAY",
+          "type": "cds.String"
+        }
+      },
+      "$syntax": "entity"
     },
     "ViewConsumerServices.countDefect": {
       "kind": "entity",
