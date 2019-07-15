@@ -13,6 +13,7 @@
         <EntitySet Name="Products_Defects" EntityType="ViewConsumerServices.Products_Defects"/>
         <EntitySet Name="countDay" EntityType="ViewConsumerServices.countDay"/>
         <EntitySet Name="countDefect" EntityType="ViewConsumerServices.countDefect"/>
+        <EntitySet Name="countDefectAll" EntityType="ViewConsumerServices.countDefectAll"/>
         <EntitySet Name="countFactory" EntityType="ViewConsumerServices.countFactory"/>
         <AssociationSet Name="Images_product" Association="ViewConsumerServices.Images_product">
           <End Role="Images" EntitySet="Images"/>
@@ -87,6 +88,13 @@
         <Property Name="NumDefect" Type="Edm.Int32"/>
         <Property Name="defect" Type="Edm.String" Nullable="false"/>
       </EntityType>
+      <EntityType Name="countDefectAll">
+        <Key>
+          <PropertyRef Name="defect"/>
+        </Key>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="defect" Type="Edm.String" Nullable="false"/>
+      </EntityType>
       <EntityType Name="countFactory">
         <Key>
           <PropertyRef Name="factoryName"/>
@@ -140,6 +148,9 @@
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
       <Annotations Target="ViewConsumerServices.countDefect/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDefectAll/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
       <Annotations Target="ViewConsumerServices.countFactory/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">

@@ -72,4 +72,9 @@ group by year(product.capture_date);
 }  where not(defect.ID = 6)
 group by dayofweek(product.capture_date), dayname(product.capture_date);
 
+ @readOnly entity countDefectAll as select from quality.Products_Defects{
+	count(product.ID) as NumDefect:Integer,
+	key defect.description as defect,
+} group by defect.description;
+
 }

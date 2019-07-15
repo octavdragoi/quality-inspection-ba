@@ -902,6 +902,69 @@
       },
       "$syntax": "entity"
     },
+    "ViewConsumerServices.countDefectAll": {
+      "kind": "entity",
+      "@Catalog.tableType": {
+        "#": "COLUMN"
+      },
+      "@cds.persistence.name": "VIEWCONSUMERSERVICES_COUNTDEFECTALL",
+      "@readOnly": true,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "quality.Products_Defects"
+            ]
+          },
+          "columns": [
+            {
+              "func": "count",
+              "args": [
+                {
+                  "ref": [
+                    "product",
+                    "ID"
+                  ]
+                }
+              ],
+              "as": "NumDefect",
+              "cast": {
+                "type": "cds.Integer"
+              }
+            },
+            {
+              "key": true,
+              "ref": [
+                "defect",
+                "description"
+              ],
+              "as": "defect"
+            }
+          ],
+          "groupBy": [
+            {
+              "ref": [
+                "defect",
+                "description"
+              ]
+            }
+          ]
+        }
+      },
+      "elements": {
+        "NumDefect": {
+          "@Core.Computed": true,
+          "@cds.persistence.name": "NUMDEFECT",
+          "type": "cds.Integer"
+        },
+        "defect": {
+          "@cds.persistence.name": "DEFECT",
+          "key": true,
+          "type": "cds.String"
+        }
+      },
+      "$syntax": "entity"
+    },
     "ViewConsumerServices.countFactory": {
       "kind": "entity",
       "@Catalog.tableType": {
