@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="ViewConsumerServices" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Defects" EntityType="ViewConsumerServices.Defects"/>
+        <EntitySet Name="Images" EntityType="ViewConsumerServices.Images"/>
+        <EntitySet Name="ItemView" EntityType="ViewConsumerServices.ItemView"/>
+        <EntitySet Name="Products" EntityType="ViewConsumerServices.Products"/>
+        <EntitySet Name="Products_Defects" EntityType="ViewConsumerServices.Products_Defects"/>
+        <EntitySet Name="countDay" EntityType="ViewConsumerServices.countDay"/>
+        <EntitySet Name="countDefect" EntityType="ViewConsumerServices.countDefect"/>
+        <EntitySet Name="countDefectAll" EntityType="ViewConsumerServices.countDefectAll"/>
+        <EntitySet Name="countFactory" EntityType="ViewConsumerServices.countFactory"/>
+        <AssociationSet Name="Images_product" Association="ViewConsumerServices.Images_product">
+          <End Role="Images" EntitySet="Images"/>
+          <End Role="Products" EntitySet="Products"/>
+        </AssociationSet>
+        <AssociationSet Name="Products_Defects_product" Association="ViewConsumerServices.Products_Defects_product">
+          <End Role="Products_Defects" EntitySet="Products_Defects"/>
+          <End Role="Products" EntitySet="Products"/>
+        </AssociationSet>
+        <AssociationSet Name="Products_Defects_defect" Association="ViewConsumerServices.Products_Defects_defect">
+          <End Role="Products_Defects" EntitySet="Products_Defects"/>
+          <End Role="Defects" EntitySet="Defects"/>
+        </AssociationSet>
+      </EntityContainer>
+      <EntityType Name="Defects">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="description" Type="Edm.String"/>
+        <NavigationProperty Name="products_defects" Relationship="ViewConsumerServices.Products_Defects_defect" FromRole="Defects" ToRole="Products_Defects"/>
+      </EntityType>
+      <EntityType Name="Images">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="url" Type="Edm.String"/>
+        <NavigationProperty Name="product" Relationship="ViewConsumerServices.Images_product" FromRole="Images" ToRole="Products"/>
+        <Property Name="product_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="ItemView">
+        <Key>
+          <PropertyRef Name="productID"/>
+        </Key>
+        <Property Name="productID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="date" Type="Edm.DateTimeOffset"/>
+        <Property Name="factory" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="Products">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="location" Type="Edm.String"/>
+        <NavigationProperty Name="images" Relationship="ViewConsumerServices.Images_product" FromRole="Products" ToRole="Images"/>
+        <NavigationProperty Name="products_defects" Relationship="ViewConsumerServices.Products_Defects_product" FromRole="Products" ToRole="Products_Defects"/>
+        <Property Name="capture_date" Type="Edm.DateTimeOffset"/>
+      </EntityType>
+      <EntityType Name="Products_Defects">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="product" Relationship="ViewConsumerServices.Products_Defects_product" FromRole="Products_Defects" ToRole="Products"/>
+        <NavigationProperty Name="defect" Relationship="ViewConsumerServices.Products_Defects_defect" FromRole="Products_Defects" ToRole="Defects"/>
+        <Property Name="product_ID" Type="Edm.Int32"/>
+        <Property Name="defect_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="countDay">
+        <Key>
+          <PropertyRef Name="NDay"/>
+        </Key>
+        <Property Name="NDay" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="mDay" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="countDefect">
+        <Key>
+          <PropertyRef Name="defect"/>
+        </Key>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="defect" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="countDefectAll">
+        <Key>
+          <PropertyRef Name="defect"/>
+        </Key>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="defect" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="countFactory">
+        <Key>
+          <PropertyRef Name="factoryName"/>
+        </Key>
+        <Property Name="NumDefect" Type="Edm.Int32"/>
+        <Property Name="factoryName" Type="Edm.String" Nullable="false"/>
+      </EntityType>
+      <Association Name="Images_product">
+        <End Role="Images" Type="ViewConsumerServices.Images" Multiplicity="*"/>
+        <End Role="Products" Type="ViewConsumerServices.Products" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Products">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Images">
+            <PropertyRef Name="product_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Products_Defects_product">
+        <End Role="Products_Defects" Type="ViewConsumerServices.Products_Defects" Multiplicity="*"/>
+        <End Role="Products" Type="ViewConsumerServices.Products" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Products">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Products_Defects">
+            <PropertyRef Name="product_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Products_Defects_defect">
+        <End Role="Products_Defects" Type="ViewConsumerServices.Products_Defects" Multiplicity="*"/>
+        <End Role="Defects" Type="ViewConsumerServices.Defects" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Defects">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Products_Defects">
+            <PropertyRef Name="defect_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Annotations Target="ViewConsumerServices.countDay/NDay" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDay/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDay/mDay" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDefect/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countDefectAll/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="ViewConsumerServices.countFactory/NumDefect" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
