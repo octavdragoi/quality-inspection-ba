@@ -58,13 +58,6 @@ service ViewConsumerServices{
 	key defect.description as defect,
 } where not(defect.ID =6) group by defect.description;
 	
-/*
-@readOnly entity countYear as select from quality.Products_Defects{
-	count(product.ID) as NumDefect:Integer,
-	key	year(product.capture_date) as mYear:Integer,
-}  where not(defect.ID =6)
-group by year(product.capture_date);
-*/
 @readOnly entity countDay as select from quality.Products_Defects{
 	key dayofweek(product.capture_date) as NDay:Integer,
 	count(product.ID) as NumDefect:Integer,
